@@ -1,3 +1,6 @@
+#run from terminal with: 
+#$ bokeh serve --show lin_reg_gd_bokeh.py
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -54,6 +57,13 @@ iterations = 25
 # call function to get beta values and cost fun values for each iteration
 beta, cost_hist, beta_hist = gradient_descent(predictor, y, beta_init, alpha, iterations)
 
+###
+#Create bokeh plot that shows how the fitted line changes over the iterations
+###
+
+# bokeh code used was adapted from the famous gapminder example:
+# https://github.com/bokeh/bokeh/blob/master/examples/app/gapminder/main.py
+
 data_bokeh = {}
 iter_list = list(range(iterations))
 
@@ -64,7 +74,7 @@ for i, b in enumerate(beta_hist):
 
 source = ColumnDataSource(data=data_bokeh[iter_list[0]])
 
-plot = figure(x_range=(-1, 22), y_range=(-1, 22), 
+plot = figure(x_range=(-2, 22), y_range=(-2, 22), 
               title='Linear Regression Batch Gradient Descent', plot_height=300)
 plot.xaxis.ticker = SingleIntervalTicker(interval=1)
 plot.xaxis.axis_label = "X"
@@ -76,7 +86,7 @@ plot.line(
     y='y',
     source=source,
     line_color=Spectral6[4],
-    line_width=0.5,
+    line_width=1.5,
 )
 plot.circle(
     x=x,
