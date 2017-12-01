@@ -42,15 +42,15 @@ def gradient_descent(X, Y, B, alpha, n_iter):
 
 # Create data
 x = np.arange(0.0, 20, 0.1)
-y = [i*0.75+np.random.normal() for i in x]
+y = [i*0.75 + np.random.normal() for i in x]
 # add column of 1s for intercept evaluation
 x0 = np.ones(len(x))
 predictor = np.array([x0, x]).T
 
 # set learning rate and initial values for slope and intercept
 beta_init = np.array([0, 0])
-alpha = 0.015
-iterations = 500
+alpha = 0.01
+iterations = 25
 # call function to get beta values and cost fun values for each iteration
 beta, cost_hist, beta_hist = gradient_descent(predictor, y, beta_init, alpha, iterations)
 
@@ -106,7 +106,7 @@ def animate_update():
 def animate():
     if button.label == '► Play':
         button.label = '❚❚ Pause'
-        curdoc().add_periodic_callback(animate_update, 50)
+        curdoc().add_periodic_callback(animate_update, 500)
     else:
         button.label = '► Play'
         curdoc().remove_periodic_callback(animate_update)
