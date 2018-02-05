@@ -1,19 +1,12 @@
-#run from terminal with: 
-#$ bokeh serve --show lin_reg_gd_bokeh.py
+# run from terminal with: 
+# $ bokeh serve --show lin_reg_gd_bokeh.py
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns 
-import random
-
-from bokeh.core.properties import field
 from bokeh.io import curdoc
 from bokeh.layouts import layout
 from bokeh.models import (
-    ColumnDataSource, HoverTool, SingleIntervalTicker, Slider, Button, Label,
-    CategoricalColorMapper,
-)
+    ColumnDataSource, SingleIntervalTicker, Slider, Button)
 from bokeh.palettes import Spectral6
 from bokeh.plotting import figure
 
@@ -23,6 +16,7 @@ def cost_func(X, Y, B):
     theta = np.sum((X.dot(B) - Y)**2) / (2*m)
     return theta
 
+
 def gradient_descent(X, Y, B, alpha, n_iter):
     cost_history = []
     beta_history = []
@@ -30,7 +24,7 @@ def gradient_descent(X, Y, B, alpha, n_iter):
     m = len(Y)
     for i in range(n_iter):
         # predicted value
-        y_hat = np.dot(X,B)
+        y_hat = np.dot(X, B)
         # error
         loss = y_hat - Y
         # Gradient Calculation
@@ -42,6 +36,7 @@ def gradient_descent(X, Y, B, alpha, n_iter):
         cost = cost_func(X, Y, B)
         cost_history.append(cost)
     return B, cost_history, beta_history
+
 
 # Create data
 x = np.arange(0.0, 20, 0.1)
@@ -58,7 +53,7 @@ iterations = 25
 beta, cost_hist, beta_hist = gradient_descent(predictor, y, beta_init, alpha, iterations)
 
 ###
-#Create bokeh plot that shows how the fitted line changes over the iterations
+# Create bokeh plot that shows how the fitted line changes over the iterations
 ###
 
 # bokeh code used was adapted from the famous gapminder example:
@@ -69,13 +64,14 @@ iter_list = list(range(iterations))
 
 for i, b in enumerate(beta_hist):
     y_pred = np.dot(predictor, b)
-    df = pd.DataFrame({'x':x, 'y':y_pred})
-    data_bokeh[i]= df.to_dict('series')
+    df = pd.DataFrame({'x': x, 'y': y_pred})
+    data_bokeh[i] = df.to_dict('series')
 
 source = ColumnDataSource(data=data_bokeh[iter_list[0]])
 
 plot = figure(x_range=(-2, 22), y_range=(-2, 22), 
-              title='Linear Regression Batch Gradient Descent', plot_height=300)
+              title='Linear Regression Batch Gradient Descent', 
+              plot_height=300)
 plot.xaxis.ticker = SingleIntervalTicker(interval=1)
 plot.xaxis.axis_label = "X"
 plot.yaxis.ticker = SingleIntervalTicker(interval=1)
@@ -99,19 +95,23 @@ plot.circle(
     line_alpha=0.5,
 )
 
+
 def slider_update(attrname, old, new):
     position = slider.value
     source.data = data_bokeh[position]
 
+
 slider = Slider(start=iter_list[0], end=iter_list[-1], value=iter_list[0],
-                 step=1, title="iteration")
+                step=1, title="iteration")
 slider.on_change('value', slider_update)
+
 
 def animate_update():
     iter_n = slider.value + 1
     if iter_n > iter_list[-1]:
         iter_n = iter_list[0]
     slider.value = iter_n
+
 
 def animate():
     if button.label == '► Play':
@@ -120,6 +120,7 @@ def animate():
     else:
         button.label = '► Play'
         curdoc().remove_periodic_callback(animate_update)
+
 
 button = Button(label='► Play', width=60)
 button.on_click(animate)
