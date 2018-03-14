@@ -1,4 +1,4 @@
-# run from terminal with: 
+# run from terminal with:
 # $ bokeh serve --show lin_reg_gd_bokeh.py
 
 import numpy as np
@@ -50,7 +50,8 @@ beta_init = np.array([0, 0])
 alpha = 0.01
 iterations = 25
 # call function to get beta values and cost fun values for each iteration
-beta, cost_hist, beta_hist = gradient_descent(predictor, y, beta_init, alpha, iterations)
+beta, cost_hist, beta_hist = gradient_descent(predictor, y,
+                                              beta_init, alpha, iterations)
 
 ###
 # Create bokeh plot that shows how the fitted line changes over the iterations
@@ -69,8 +70,8 @@ for i, b in enumerate(beta_hist):
 
 source = ColumnDataSource(data=data_bokeh[iter_list[0]])
 
-plot = figure(x_range=(-2, 22), y_range=(-2, 22), 
-              title='Linear Regression Batch Gradient Descent', 
+plot = figure(x_range=(-2, 22), y_range=(-2, 22),
+              title='Linear Regression Batch Gradient Descent',
               plot_height=300)
 plot.xaxis.ticker = SingleIntervalTicker(interval=1)
 plot.xaxis.axis_label = "X"
